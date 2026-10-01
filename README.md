@@ -7,6 +7,11 @@ mỗi khi có máy rảnh, kiểm tra an toàn, tính KPI và ghi kết quả.
 Kernel là bản copy nguyên byte của PySCFabSim-release đã gia cố (bản Paper 4 dùng),
 khoá bằng SHA-256. Chỉ dùng thư viện chuẩn Python, không cần numpy/torch.
 
+![Nhà máy 3D của fabframe: replay luật FIFO trên SMT2020 HVLM, bảng chọn luật và danh sách lần chạy](docs/images/ui-tong-quan.jpg)
+
+**Sơ đồ:** [30 sơ đồ luồng](docs/SO_DO_LUONG.md) đi từ nút ▶ Chạy tới kernel, dispatcher, KPI và
+nhà máy 3D, mỗi sơ đồ có link tới đúng dòng mã.
+
 ## Cài đặt (một lần)
 
 ```powershell
@@ -47,8 +52,9 @@ Trình duyệt mở `http://127.0.0.1:8780/`:
   cùng tốc độ và xếp hàng sau nhau, không đi xuyên qua nhau. Chuyến đi gắn với đồng hồ replay:
   dừng thì xe đứng yên, tua lùi thì xe chạy lùi; tua chậm (×1 … 1p/s) và lại gần một khu (bấm
   đúp) để xem rõ từng xe. Rê chuột vào máy: `2 lot → DRY ETCH` = số lot đang ở máy và khu lot
-  mới nhất sẽ đi tiếp. Đây là minh hoạ: kernel SMT2020 chuyển lot sang bước sau ngay lập tức,
-  không mô phỏng thời gian vận chuyển, nên có lúc một lot vừa được chở đi vừa được chở tới.
+  mới nhất sẽ đi tiếp. Đây là minh hoạ: kernel có cộng thời gian vận chuyển giữa hai bước
+  (Fab→Fab 375–525 s, theo `fromto.txt`) nhưng không mô phỏng xe, nên chuyến OHT được dựng lại
+  từ replay và có lúc một lot vừa được chở đi vừa được chở tới.
   Như fab 300 mm hiện đại, chỉ có OHT: nó vừa chở lot giữa các khu, vừa hạ FOUP xuống tận cổng
   nạp của máy (không có AGV dưới sàn).
 - Màu trạng thái nằm ở nóc và phần thân trên của máy (phần thân dưới giữ màu trắng thiết bị):
@@ -77,6 +83,25 @@ Trình duyệt mở `http://127.0.0.1:8780/`:
   hoặc Esc rồi Tab để rời ô, Ctrl+S để lưu.
 - Địa chỉ `…/#t=2.5` mở replay tại ngày 2,5 (dừng); `#t=2.5&play` thì phát luôn;
   `#bay=Litho` phóng vào một khu. Liên kết chỉ áp cho replay mở đầu tiên.
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/images/ui-khu-may.jpg" alt="Cận cảnh khu Litho dưới đèn vàng với màu trạng thái máy"></td>
+    <td width="50%"><img src="docs/images/ui-oht.jpg" alt="Xe OHT thả dây hạ FOUP xuống cổng nạp của máy"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Khu Litho dưới đèn vàng: đỏ sọc đen = hỏng, vàng = setup, nóc trắng = bận</sub></td>
+    <td align="center"><sub>Xe OHT hạ FOUP xuống cổng nạp; nóc xanh dương kẻ lưới = bảo trì</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="docs/images/ui-tooltip.png" alt="Rê chuột vào máy để xem trạng thái và lot"></td>
+    <td width="50%"><img src="docs/images/ui-toc-do.png" alt="Thẻ tốc độ phát replay và thanh điều khiển"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Rê chuột vào máy: trạng thái, số lot ở máy, khu đi tiếp, số lot chờ</sub></td>
+    <td align="center"><sub>Thẻ tốc độ: ×1 … 1 ngày mỗi giây, tiến hoặc lùi</sub></td>
+  </tr>
+</table>
 
 Mỗi lần chạy nằm trong `runs\ui\<mã>\` (yêu cầu, bản chụp code, kết quả, tiến độ, replay,
 nhật ký), nên sửa dispatcher sau này không làm đổi hồ sơ lần chạy cũ. Replay của giao diện ghi
@@ -133,6 +158,8 @@ class PriorityMinusCR(Dispatcher):
 Đây là luật tự viết duy nhất Paper 4 từng chạy (`P4-HEADROOM-SYMBOLIC-PRIORITY-MINUS-CR-v1`):
 ưu tiên trừ tỷ số tới hạn. Nút `+` trong giao diện cũng bắt đầu từ luật này.
 
+<p align="center"><img src="docs/images/ui-code.png" width="620" alt="Ô viết dispatcher trong giao diện web, mẫu priority − CR"></p>
+
 Hoặc chỉ một hàm:
 
 ```python
@@ -173,6 +200,21 @@ Mọi thứ là **bản sao chỉ đọc**; dispatcher không chạm được v�
 Thứ tự cuối cùng là `(hợp minimum-run trước, lot đang có CQT trước, điểm của bạn)`.
 Sau đó **bộ chọn của kernel** ghép batch, chuyển sang máy cùng họ đã có đúng setup nếu
 có, và giữ luật minimum-run. Dispatcher chỉ quyết định thứ tự trong phần còn lại.
+
+```mermaid
+flowchart TD
+    M["Máy rảnh có lot chờ<br/>(kernel chọn máy)"] --> S["score(lot, decision)<br/>cho từng lot"]
+    S --> V{"Điểm hợp lệ?"}
+    V -->|có| K["Xếp: hợp min-run trước,<br/>CQT đang mở trước,<br/>rồi điểm cao trước"]
+    V -->|không| F["FIFO dự phòng cho<br/>quyết định này<br/>(--strict: dừng)"]
+    F --> K
+    K --> G["Bộ chọn của kernel: chỉ<br/>batch đủ, có thể đổi sang<br/>máy cùng họ đã có setup,<br/>chốt min-run"]
+    G --> D["instance.dispatch()"]
+```
+
+Chi tiết: [C2 — một quyết định](docs/SO_DO_LUONG.md#c2-một-quyết-định),
+[C3 — thứ tự cuối cùng và bộ chọn của kernel](docs/SO_DO_LUONG.md#c3-thứ-tự-cuối-cùng-và-bộ-chọn-của-kernel),
+[C4 — bảo vệ và FIFO dự phòng](docs/SO_DO_LUONG.md#c4-bảo-vệ-và-fifo-dự-phòng).
 
 ## Chạy
 
@@ -222,6 +264,10 @@ print(result.kpi["throughput_per_day"], result.kpi["on_time_rate"])
 
 Kèm theo: số quyết định, số lần dùng FIFO dự phòng và lý do, thời gian dispatcher chạy.
 
+![Bảng chi tiết một lần chạy FIFO HVLM, warm-up 60 + đo 365 ngày: ô KPI, biểu đồ lot hoàn tất, WIP và vi phạm CQT theo ngày, bảng theo loại lot](docs/images/ui-chi-tiet.png)
+
+Mỗi KPI đếm từ đâu: [C7 — warm-up, cửa sổ đo và KPI](docs/SO_DO_LUONG.md#c7-warm-up-cửa-sổ-đo-và-kpi).
+
 ## Khung đảm bảo gì
 
 - **Không làm sai mô phỏng.** FIFO và CR chạy qua khung trùng **từng lần dispatch,
@@ -235,6 +281,9 @@ Kèm theo: số quyết định, số lần dùng FIFO dự phòng và lý do, t
 - **Kernel không bị sửa.** Mọi file kernel và dữ liệu được kiểm SHA-256 mỗi lần chạy.
 
 Chạy toàn bộ test: `.venv\Scripts\python.exe -m pytest` (khoảng 2 phút).
+Sơ đồ: [A6 — bộ test bảo vệ điều gì](docs/SO_DO_LUONG.md#a6-bộ-test-bảo-vệ-điều-gì),
+[B1 — nạp kernel và kiểm toàn vẹn](docs/SO_DO_LUONG.md#b1-nạp-kernel-và-kiểm-toàn-vẹn),
+[C6 — RNG theo sự kiện](docs/SO_DO_LUONG.md#c6-rng-theo-sự-kiện).
 
 ## Cấu trúc
 
@@ -243,6 +292,7 @@ fabframe/
   api.py          Dispatcher, LotView, MachineView, DecisionView — thứ bạn dùng
   runner.py       vòng mô phỏng, kiểm tra điểm, dự phòng FIFO
   kpi.py          tính KPI
+  replay.py       ghi replay cho nhà máy 3D
   rng.py          RNG theo sự kiện
   loader.py       nạp dispatcher từ tên / file / module
   dispatchers/    bộ luật Paper 4: fifo, critical-ratio, atc, srpt, atc-cqt, srpt-cqt,
@@ -252,7 +302,8 @@ fabframe/
   cli.py
 examples/         priority_minus_cr.py (luật tự viết của Paper 4, làm mẫu)
 my_dispatchers/   dispatcher bạn viết trong giao diện
-docs/             luong-he-thong.drawio — sơ đồ luồng hệ thống (mở bằng extension draw.io)
+docs/             SO_DO_LUONG.md — 30 sơ đồ luồng; luong-he-thong.drawio (mở bằng extension
+                  draw.io); images/ — ảnh giao diện và ảnh xuất từ sơ đồ draw.io
 runs/             kết quả (không đưa vào git)
 tests/
 ```

@@ -10,7 +10,7 @@
                 <mxCell id="tong-quan-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Trình duyệt&lt;/b&gt; · http://127.0.0.1:8780&lt;br&gt;app.js + fab3d.js&lt;br&gt;• chọn luật, dữ liệu, số ngày, seed → ▶ Chạy&lt;br&gt;• viết / xem code dispatcher&lt;br&gt;• xem tiến độ, KPI, biểu đồ, &lt;b&gt;nhà máy 3D&lt;/b&gt;" vertex="1">
                     <mxGeometry height="160" width="280" x="30" y="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="tong-quan-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Dòng lệnh&lt;/b&gt;&lt;br&gt;python -m fabframe run · check · list · verify" vertex="1">
+                <mxCell id="tong-quan-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Dòng lệnh&lt;/b&gt;&lt;br&gt;python -m fabframe run · check · list · verify · ui" vertex="1">
                     <mxGeometry height="70" width="280" x="30" y="470" as="geometry"/>
                 </mxCell>
                 <mxCell id="tong-quan-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Python&lt;/b&gt;&lt;br&gt;from fabframe import run · run(dispatcher, …)" vertex="1">
@@ -61,10 +61,10 @@
                 <mxCell id="tong-quan-19" parent="tong-quan-17" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;datasets/&lt;/b&gt; SMT2020_HVLM · SMT2020_LVHM&lt;br&gt;route, máy, setup, PM, đơn hàng, WIP đầu" vertex="1">
                     <mxGeometry height="60" width="300" x="15" y="120" as="geometry"/>
                 </mxCell>
-                <mxCell id="tong-quan-20" parent="tong-quan-17" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;FileInstance&lt;/b&gt; — hàng đợi sự kiện&lt;br&gt;lot đến, máy xong, hỏng máy, bảo trì (PM),&lt;br&gt;cửa sổ CQT, setup" vertex="1">
+                <mxCell id="tong-quan-20" parent="tong-quan-17" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;FileInstance → Instance&lt;/b&gt;&lt;br&gt;hàng đợi sự kiện: máy xong, lot xong,&lt;br&gt;hỏng máy, PM lịch; thả lot theo release_at" vertex="1">
                     <mxGeometry height="80" width="300" x="15" y="200" as="geometry"/>
                 </mxCell>
-                <mxCell id="tong-quan-21" parent="tong-quan-17" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;greedy.py — bộ chọn&lt;/b&gt;&lt;br&gt;xếp lot theo ptuple · ghép batch&lt;br&gt;đổi sang máy cùng họ đã đúng setup&lt;br&gt;giữ luật minimum-run" vertex="1">
+                <mxCell id="tong-quan-21" parent="tong-quan-17" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;greedy.py — bộ chọn&lt;/b&gt;&lt;br&gt;xếp lot theo ptuple · ghép batch&lt;br&gt;đổi sang máy cùng họ đã đúng setup&lt;br&gt;chốt minimum-run (nhả sau 5 lần hoãn)" vertex="1">
                     <mxGeometry height="100" width="300" x="15" y="370" as="geometry"/>
                 </mxCell>
                 <mxCell id="tong-quan-22" parent="tong-quan-17" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Randomizer&lt;/b&gt; — thời gian gia công, hỏng, sửa" vertex="1">
@@ -206,7 +206,7 @@
                 <mxCell id="quyet-dinh-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Chuẩn bị&lt;/b&gt;: kiểm kernel SHA-256 · nạp dispatcher (loader) · đọc SMT2020&lt;br&gt;· đặt seed + RNG theo sự kiện · &lt;b&gt;dispatcher.setup(fab)&lt;/b&gt;" vertex="1">
                     <mxGeometry height="70" width="380" x="300" y="160" as="geometry"/>
                 </mxCell>
-                <mxCell id="quyet-dinh-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Kernel chạy sự kiện&lt;/b&gt; tới quyết định kế tiếp (next_decision_point):&lt;br&gt;lot đến, máy xong, hỏng, bảo trì, CQT…" vertex="1">
+                <mxCell id="quyet-dinh-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Kernel chạy sự kiện&lt;/b&gt; tới quyết định kế tiếp (next_decision_point):&lt;br&gt;lot đến, máy xong, lot xong, hỏng, bảo trì…" vertex="1">
                     <mxGeometry height="65" width="380" x="300" y="260" as="geometry"/>
                 </mxCell>
                 <mxCell id="quyet-dinh-5" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=center;" value="Hết sự kiện&lt;br&gt;hoặc quá thời gian?" vertex="1">
@@ -245,7 +245,7 @@
                 <mxCell id="quyet-dinh-16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;ptuple&lt;/b&gt; = (hợp minimum-run trước, lot đang có CQT trước, &lt;b&gt;−điểm&lt;/b&gt;)" vertex="1">
                     <mxGeometry height="60" width="380" x="300" y="1000" as="geometry"/>
                 </mxCell>
-                <mxCell id="quyet-dinh-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Bộ chọn của kernel&lt;/b&gt; (greedy.py)&lt;br&gt;· xếp lot theo ptuple&lt;br&gt;· bước batch: nhóm theo bước, batch đầy hơn trước, chỉ chạy khi đủ batch_max&lt;br&gt;· đổi sang máy cùng họ đã đúng setup · giữ luật minimum-run" vertex="1">
+                <mxCell id="quyet-dinh-17" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Bộ chọn của kernel&lt;/b&gt; (greedy.py)&lt;br&gt;· xếp lot theo ptuple&lt;br&gt;· bước batch: nhóm theo bước, batch đầy hơn trước, chỉ chạy khi đủ batch_max&lt;br&gt;· đổi sang máy cùng họ đã đúng setup · chốt minimum-run, nhả sau 5 lần hoãn" vertex="1">
                     <mxGeometry height="105" width="380" x="300" y="1095" as="geometry"/>
                 </mxCell>
                 <mxCell id="quyet-dinh-18" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;align=center;" value="Có lot&lt;br&gt;để chạy?" vertex="1">
@@ -257,7 +257,7 @@
                 <mxCell id="quyet-dinh-20" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;instance.dispatch(máy, lot)&lt;/b&gt;: setup + gia công,&lt;br&gt;hẹn sự kiện máy xong" vertex="1">
                     <mxGeometry height="60" width="380" x="300" y="1355" as="geometry"/>
                 </mxCell>
-                <mxCell id="quyet-dinh-21" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Quan sát&lt;/b&gt; (không đổi mô phỏng): KPI · replay 3D ·&lt;br&gt;tiến độ events.jsonl · ledger (nếu bật)" vertex="1">
+                <mxCell id="quyet-dinh-21" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Quan sát&lt;/b&gt; (không đổi mô phỏng): KPI · replay 3D&lt;br&gt;(callback của kernel) · ledger (nếu bật)" vertex="1">
                     <mxGeometry height="60" width="380" x="300" y="1450" as="geometry"/>
                 </mxCell>
                 <mxCell id="quyet-dinh-22" parent="1" style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontColor=#1a1a1a;align=left;verticalAlign=middle;spacingLeft=8;spacingRight=8;" value="&lt;b&gt;Kết thúc&lt;/b&gt;: finalize · lưu replay.json/.bin ·&lt;br&gt;events “finished” · trả RunResult (KPI)" vertex="1">
