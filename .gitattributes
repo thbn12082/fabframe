@@ -1,0 +1,4 @@
+# The kernel and datasets are pinned by MANIFEST.sha256: never convert line endings.
+fabframe/kernel/vendor/** -text
+fabframe/kernel/datasets/** -text
+fabframe/kernel/MANIFEST.sha256 -text

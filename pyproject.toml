@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fabframe"
+version = "0.1.0"
+description = "Plug a dispatcher into the SMT2020 fab simulator and run it"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.scripts]
+fabframe = "fabframe.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["fabframe*"]
+
+[tool.setuptools.package-data]
+"fabframe.kernel" = ["MANIFEST.sha256", "PROVENANCE.md", "LICENSE-PySCFabSim", "vendor/**/*", "datasets/**/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
